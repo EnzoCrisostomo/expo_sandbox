@@ -6,6 +6,7 @@ import Welcome from "./src/screens/Welcome";
 import { RootStackParamList } from "./src/types";
 import TextColor from "./src/screens/TextColor";
 import { StatusBar } from "expo-status-bar";
+import AnimatedLinearGradient from "./src/screens/AnimetedLinearGradient";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -17,6 +18,7 @@ export default function App() {
                 <Stack.Screen name="Welcome" component={Welcome} />
                 <Stack.Screen name="Carousel" component={Carousel} options={{headerShown: false}} />
                 <Stack.Screen name="TextColor" component={TextColor} options={{headerShown: true}} />
+                <Stack.Screen name="AnimatedLinearGradient" component={AnimatedLinearGradient} options={{headerShown: true}} />
             </Stack.Navigator>
         </NavigationContainer>
     );

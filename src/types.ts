@@ -4,6 +4,7 @@ export type RootStackParamList = {
     Welcome: undefined;
     Carousel: undefined;
     TextColor: undefined;
+    AnimatedLinearGradient: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
