@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Button, Text, StyleSheet, View } from "react-native";
+import { Button, Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { RootStackScreenProps } from "../types";
 
 export default function TextColor({
@@ -34,7 +34,7 @@ export default function TextColor({
                 <Text style={[styles.text, { color, fontWeight: "200" }]}>200</Text>
                 <Text style={[styles.text, { color, fontWeight: "100" }]}>100</Text>
             </View>
-            <Button onPress={randomizeColor} title="Nova Cor"></Button>
+            <TouchableOpacity style={styles.button} onPress={randomizeColor} ><Text>Nova Cor</Text></TouchableOpacity>
         </SafeAreaView>
     );
 }
@@ -49,4 +49,12 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontSize: 30,
     },
+    button:{
+        backgroundColor: "white",
+        width: "80%",
+        height: "20%",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 10,
+    }
 });

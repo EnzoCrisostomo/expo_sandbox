@@ -4,7 +4,6 @@ import { Button, Text, StyleSheet, View, Dimensions } from "react-native";
 import { RootStackScreenProps } from "../types";
 import { LinearGradient } from "expo-linear-gradient";
 import Animated, {
-    Easing,
     useAnimatedStyle,
     useSharedValue,
     withRepeat,
@@ -28,54 +27,48 @@ const colors = {
     yellow: "#F29D00",
 };
 
-const width = Dimensions.get("screen").width;
-const height = Dimensions.get("screen").height;
+const width = Dimensions.get("window").width;
+const height = Dimensions.get("window").height;
 
 export default function AnimatedLinearGradient({
     navigation,
 }: RootStackScreenProps<"AnimatedLinearGradient">) {
-    const xOffset = width;
-    const yOffset = height;
-    const positionX = useSharedValue(-xOffset);
-    const positionY = useSharedValue(-yOffset);
-    const rotation = useSharedValue(0);
+    const xOffset = width * 2.5;
+    const yOffset = height * 2.5;
+    const positionX = useSharedValue(xOffset);
+    const positionY = useSharedValue(yOffset);
 
     const gradientAnimation = useAnimatedStyle(() => ({
         transform: [
             { translateX: positionX.value },
             { translateY: positionY.value },
-            //{ rotateZ: `${rotation.value}deg` },
         ],
     }));
 
     useEffect(() => {
         positionX.value = withRepeat(
-            withTiming(xOffset, { duration: 10000, easing: Easing.linear }),
-            -1,
-            true
-        );
-        positionY.value = withRepeat(
-            withTiming(yOffset, { duration: 12000, easing: Easing.linear }),
-            -1,
-            true
-        );
-        rotation.value = withRepeat(
-            withTiming(360, { duration: 50000, easing: Easing.linear }),
+            withTiming(-xOffset, { duration: 8000 }),
             -1
         );
-
-        return () => {};
+        positionY.value = withRepeat(
+            withTiming(-yOffset, { duration: 8000 }),
+            -1
+        );
+        return () => { };
     }, []);
 
     return (
         <SafeAreaView style={styles.container}>
             <AnimatedGradient
                 style={[styles.gradient, gradientAnimation]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
+                start={{ x: 0.20, y: 0.20 }}
+                end={{ x: 0.80, y: 0.80 }}
+                locations={[0, 0.3, 0.6, 1]}
                 colors={[
                     colors.blue,
-                    colors.lightGreen
+                    "#488576",
+                    "#488576",
+                    colors.blue
                 ]}
             />
         </SafeAreaView>
@@ -93,7 +86,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     gradient: {
-        width: height * 3,
-        height: height * 3  
+        width: width * 6,
+        height: height * 6,
+        transform: [/* {translateX: -width * 2.5}, {translateY: -height* 2.5}, */ { scale: 0.15 }]
     },
 });
