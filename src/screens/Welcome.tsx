@@ -12,6 +12,8 @@ export default function Welcome({navigation}: RootStackScreenProps<"Welcome">){
             <View style={styles.spacer}/>
             <Button onPress={()=>{navigation.navigate("AnimatedLinearGradient")}} title='AnimatedLinearGradient'></Button>
             <View style={styles.spacer}/>
+            <Button onPress={()=>{navigation.navigate("AnimatedFont")}} title='AnimatedFont'></Button>
+            <View style={styles.spacer}/>
         </SafeAreaView>
     )
 }
