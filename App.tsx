@@ -9,21 +9,24 @@ import { StatusBar } from "expo-status-bar";
 import AnimatedLinearGradient from "./src/screens/AnimatedLinearGradient";
 import AnimatedFont from "./src/screens/AnimatedFont";
 import Chart from "./src/screens/Chart/Chart";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
     return (
-        <NavigationContainer theme={DarkTheme}>
-          <StatusBar style="light"/>
-            <Stack.Navigator initialRouteName="Welcome" screenOptions={{animation: "fade_from_bottom"}}>
-                <Stack.Screen name="Welcome" component={Welcome} />
-                <Stack.Screen name="Carousel" component={Carousel} options={{headerShown: false}} />
-                <Stack.Screen name="TextColor" component={TextColor} options={{headerShown: true}} />
-                <Stack.Screen name="AnimatedLinearGradient" component={AnimatedLinearGradient} options={{headerShown: true}} />
-                <Stack.Screen name="AnimatedFont" component={AnimatedFont} options={{headerShown: true}} />
-                <Stack.Screen name="Chart" component={Chart} options={{headerShown: true}} />
-            </Stack.Navigator>
-        </NavigationContainer>
+        <GestureHandlerRootView style={{flex: 1}}>
+            <NavigationContainer theme={DarkTheme}>
+                <StatusBar style="light" />
+                <Stack.Navigator initialRouteName="Welcome" screenOptions={{ animation: "fade_from_bottom" }}>
+                    <Stack.Screen name="Welcome" component={Welcome} />
+                    <Stack.Screen name="Carousel" component={Carousel} options={{ headerShown: false }} />
+                    <Stack.Screen name="TextColor" component={TextColor} options={{ headerShown: true }} />
+                    <Stack.Screen name="AnimatedLinearGradient" component={AnimatedLinearGradient} options={{ headerShown: true }} />
+                    <Stack.Screen name="AnimatedFont" component={AnimatedFont} options={{ headerShown: true }} />
+                    <Stack.Screen name="Chart" component={Chart} options={{ headerShown: true }} />
+                </Stack.Navigator>
+            </NavigationContainer>
+        </GestureHandlerRootView>
     );
 }

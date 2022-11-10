@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Text, View, StyleSheet, Dimensions, Pressable } from "react-native";
 import * as shape from "d3";
 import Svg, { Path } from "react-native-svg";
@@ -9,6 +9,9 @@ import { Prices, DataPoints, WINDOW_WIDTH } from "./Model";
 import Header from "./Header";
 import Cursor from "./Cursor";
 import data from "./data.json";
+import Animated, { useAnimatedGestureHandler, useAnimatedProps, useAnimatedStyle, useSharedValue, withSequence, withTiming } from "react-native-reanimated";
+import { parse, serialize } from "react-native-redash";
+import { PanGestureHandler } from "react-native-gesture-handler";
 
 const { width } = Dimensions.get("window");
 
@@ -33,11 +36,12 @@ const buildGraph = (datapoints: DataPoints, label: string) => {
     minPrice,
     maxPrice,
     percentChange: datapoints.percent_change,
-    path: shape
+    path: parse(shape
       .line()
       .x(([, x]) => scaleX(x) as number)
       .y(([y]) => scaleY(y) as number)
-      .curve(shape.curveBasis)(formattedValues) as string,
+      .curve(shape.curveBasis)(formattedValues) as string
+    ),
   };
 };
 
@@ -99,29 +103,68 @@ const styles = StyleSheet.create({
   },
 });
 
+const AnimatedPath = Animated.createAnimatedComponent(Path);
+
 const Graph = () => {
-  const [selected, setSelected] = useState(0);
-  const current = graphs[selected].data;
+  const selected = useSharedValue(0);
+  const transition = useSharedValue(1);
+  const [current, setCurrent] = useState(graphs[0].data);
+  const [current2, setCurrent2] = useState(graphs[1].data);
+
+  const animatedProps = useAnimatedProps(() => ({
+    opacity: transition.value
+  }));
+
+  const selectedStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: BUTTON_WIDTH * selected.value }]
+  }));
+
+  const active = useSharedValue(false);
+  const x = useSharedValue(0);
+
+  const onGestureEvent = useAnimatedGestureHandler({
+    onStart: () => {
+      active.value = true;
+    },
+    onActive: (event) => {
+      x.value = event.x;
+    },
+    onEnd: () => {
+      active.value = false;
+    }
+  });
+
   return (
     <View style={styles.container}>
       <Header data={current} />
-      <View>
-        <Svg width={WINDOW_WIDTH} height={WINDOW_WIDTH}>
-          <Path
-            d={current.path}
-            fill="transparent"
-            stroke="black"
-            strokeWidth={3}
-          />
-        </Svg>
-        <Cursor data={current} />
-      </View>
+      <PanGestureHandler onGestureEvent={onGestureEvent}>
+        <Animated.View>
+          <Svg width={WINDOW_WIDTH} height={WINDOW_WIDTH}>
+            <AnimatedPath
+              animatedProps={animatedProps}
+              d={serialize(current.path)}
+              fill="transparent"
+              stroke="black"
+              strokeWidth={3}
+            />
+            <AnimatedPath
+              animatedProps={animatedProps}
+              d={serialize(current2.path)}
+              fill="transparent"
+              stroke="red"
+              strokeWidth={3}
+            />
+          </Svg>
+          <Cursor data={current2} x={x} />
+          <Cursor data={current} x={x}/>
+        </Animated.View>
+      </PanGestureHandler>
       <View style={styles.selection}>
         <View style={StyleSheet.absoluteFill}>
-          <View
+          <Animated.View
             style={[
               styles.backgroundSelection,
-              { transform: [{ translateX: BUTTON_WIDTH * selected }] },
+              selectedStyle,
             ]}
           />
         </View>
@@ -130,7 +173,10 @@ const Graph = () => {
             <Pressable
               key={graph.label}
               onPress={() => {
-                setSelected(index);
+                setCurrent(graphs[index].data);
+                selected.value = withTiming(index);
+                transition.value = 0;
+                transition.value = withTiming(1);
               }}
             >
               <View style={[styles.labelContainer]}>

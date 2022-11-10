@@ -17,7 +17,7 @@ export default function Chart({ navigation }: RootStackScreenProps<"Chart">) {
     return (
         <View style={styles.container}>
             <Graph />
-            <Footer />
+            {/* <Footer /> */}
         </View>
     );
 }
