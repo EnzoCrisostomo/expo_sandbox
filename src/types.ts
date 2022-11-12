@@ -6,7 +6,7 @@ export type RootStackParamList = {
     TextColor: undefined;
     AnimatedLinearGradient: undefined;
     AnimatedFont: undefined;
-    Chart: undefined;
+    Graph: undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

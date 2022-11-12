@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
 
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
-const Graph = () => {
+export default function Graph (){
   const selected = useSharedValue(0);
   const transition = useSharedValue(1);
   const [current, setCurrent] = useState(graphs[0].data);
@@ -189,5 +189,3 @@ const Graph = () => {
     </View>
   );
 };
-
-export default Graph;
