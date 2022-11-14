@@ -1,4 +1,4 @@
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 export type RootStackParamList = {
     Welcome: undefined;
@@ -7,7 +7,7 @@ export type RootStackParamList = {
     AnimatedLinearGradient: undefined;
     AnimatedFont: undefined;
     Graph: undefined;
+	ProgressChart: undefined;
 };
 
-export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
-    NativeStackScreenProps<RootStackParamList, Screen>;
+export type RootStackScreenProps<Screen extends keyof RootStackParamList> = NativeStackScreenProps<RootStackParamList, Screen>;
